@@ -10,12 +10,13 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.db.MyDataSource;
 import com.example.model.Tour;
 
 public class DetailActivity extends Activity {
 
 	Tour tour;
-
+	MyDataSource datasource;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,6 +25,7 @@ public class DetailActivity extends Activity {
 		Bundle b = getIntent().getExtras();
 		tour = b.getParcelable(".model.Tour");
 		
+		datasource = new MyDataSource(this);
 		refreshDisplay();
 	}
 
@@ -40,7 +42,10 @@ public class DetailActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.action_remove:
 			
-			
+			if(datasource.removeFromDB(tour)){
+				setResult(-1);
+				finish();
+			}
 			
 			break;
 		default:

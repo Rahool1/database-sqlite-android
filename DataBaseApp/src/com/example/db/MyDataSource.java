@@ -52,6 +52,15 @@ public class MyDataSource {
 	   	return tour;
 	}
 	
+	public boolean removeFromDB(Tour tour){
+		
+		String where = MyDBOpenHelper.COLUMN_ID + "=" + tour.getId(); 
+		Log.d(LOGTAG,"where :   " + where);
+		int result = database.delete(MyDBOpenHelper.TABLE_TOURS, where, null);
+		Log.d(LOGTAG,"result :   " + result);
+		return (result == 1);
+	}
+	
 	public List<Tour> findAll(){
 		List<Tour> tours = new ArrayList<Tour>();
 		

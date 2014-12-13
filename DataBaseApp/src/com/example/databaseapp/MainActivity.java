@@ -97,4 +97,14 @@ public class MainActivity extends ListActivity {
     	startActivity(intent);
     }
     
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	super.onActivityResult(requestCode, resultCode, data);
+
+    	if(resultCode == -1){
+    		datasource.open();
+    		tours = datasource.findAll();
+    		refreshDisplay();
+    	}
+    }
 }
