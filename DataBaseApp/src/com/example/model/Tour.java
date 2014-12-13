@@ -3,7 +3,13 @@ package com.example.model;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class Tour {
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
+import com.example.databaseapp.MainActivity;
+
+public class Tour implements Parcelable{
 	private long id;
 	private String title;
 	private String description;
@@ -42,9 +48,54 @@ public class Tour {
 	}
 	@Override
 	public String toString() {
-		NumberFormat nf = NumberFormat.getCurrencyInstance();
+//		NumberFormat nf = NumberFormat.getCurrencyInstance();
 		NumberFormat IndiaNF = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
 		
 		return title + "\n(" + IndiaNF.format(price) + ")";
 	}
+    public Tour() {
+    }
+
+    public Tour(Parcel in) {
+         Log.i(MainActivity.LOGTAG, "Parcel constructor");
+        
+         id = in.readLong();
+         title = in.readString();
+         description = in.readString();
+         price = in.readDouble();
+         image = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+         return 0;
+    }
+   
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+         Log.i(MainActivity.LOGTAG, "writeToParcel");
+        
+         dest.writeLong(id);
+         dest.writeString(title);
+         dest.writeString(description);
+         dest.writeDouble(price);
+         dest.writeString(image);
+    }
+
+    public static final Parcelable.Creator<Tour> CREATOR =
+              new Parcelable.Creator<Tour>() {
+
+         @Override
+         public Tour createFromParcel(Parcel source) {
+              Log.i(MainActivity.LOGTAG, "createFromParcel");
+              return new Tour(source);
+         }
+
+         @Override
+         public Tour[] newArray(int size) {
+              Log.i(MainActivity.LOGTAG, "newArray");
+              return new Tour[size];
+         }
+
+    };
 }

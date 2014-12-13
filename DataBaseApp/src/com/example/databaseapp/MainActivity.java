@@ -2,21 +2,23 @@ package com.example.databaseapp;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.example.db.MyDataSource;
 import com.example.model.Tour;
  
 public class MainActivity extends ListActivity {
 	
-	private static final String LOGTAG = "EduTech";
+	public static final String LOGTAG = "EduTech";
 	MyDataSource datasource;
-	
+	List<Tour> tours;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,15 +27,13 @@ public class MainActivity extends ListActivity {
         datasource = new MyDataSource(this);
         datasource.open();
      
-        List<Tour> tours = datasource.findAll();
+        tours = datasource.findAll();
         if(tours.size() == 0){
         	createData();
         	tours = datasource.findAll();
         }
        
-        ArrayAdapter<Tour> adapter = new ArrayAdapter<Tour>(this, 
-				android.R.layout.simple_list_item_1, tours);
-		setListAdapter(adapter);
+        refreshDisplay();
     }
 
 
@@ -42,6 +42,14 @@ public class MainActivity extends ListActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+    
+    private void refreshDisplay(){
+    	
+		ArrayAdapter<Tour> adapter = new TourListAdapter(this,tours);
+		setListAdapter(adapter);
+		
+    
     }
     
     @Override
@@ -75,6 +83,18 @@ public class MainActivity extends ListActivity {
     	
     	tour1 = datasource.create(tour1);
     	Log.d(LOGTAG, "Tour Created and id is: " + tour1.getId());
+    }
+    
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+    	super.onListItemClick(l, v, position, id);
+
+    	Tour tour = tours.get(position);
+    	
+    	Intent intent = new Intent(this,DetailActivity.class);
+    	intent.putExtra(".model.Tour", tour);
+    	
+    	startActivity(intent);
     }
     
 }
