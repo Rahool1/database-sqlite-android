@@ -1,6 +1,7 @@
 package com.example.model;
 
 import java.text.NumberFormat;
+import java.util.Locale;
 
 public class Tour {
 	private long id;
@@ -42,6 +43,8 @@ public class Tour {
 	@Override
 	public String toString() {
 		NumberFormat nf = NumberFormat.getCurrencyInstance();
-		return title + "\n(" + nf.format(price) + ")";
+		NumberFormat IndiaNF = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
+		
+		return title + "\n(" + IndiaNF.format(price) + ")";
 	}
 }

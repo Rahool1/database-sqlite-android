@@ -1,14 +1,18 @@
 package com.example.databaseapp;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.ArrayAdapter;
 
 import com.example.db.MyDataSource;
 import com.example.model.Tour;
  
-public class MainActivity extends Activity {
+public class MainActivity extends ListActivity {
 	
 	private static final String LOGTAG = "EduTech";
 	MyDataSource datasource;
@@ -20,7 +24,16 @@ public class MainActivity extends Activity {
         
         datasource = new MyDataSource(this);
         datasource.open();
-        createData();
+     
+        List<Tour> tours = datasource.findAll();
+        if(tours.size() == 0){
+        	createData();
+        	tours = datasource.findAll();
+        }
+       
+        ArrayAdapter<Tour> adapter = new ArrayAdapter<Tour>(this, 
+				android.R.layout.simple_list_item_1, tours);
+		setListAdapter(adapter);
     }
 
 
